@@ -18,14 +18,14 @@ class Event extends Model
     public function startDate(): Attribute
     {
         return Attribute::make(
-            get: fn($value) => Carbon::parse($value)->translatedFormat('d M Y'),
+            get: fn($value) => Carbon::parse($value)->translatedFormat('d M y'),
             set: fn($value) => Carbon::parse($value)->translatedFormat('Y-m-d'),
         );
     }
     public function endDate(): Attribute
     {
         return Attribute::make(
-            get: fn($value) => Carbon::parse($value)->translatedFormat('d M Y'),
+            get: fn($value) => Carbon::parse($value)->translatedFormat('d M y'),
             set: fn($value) => Carbon::parse($value)->translatedFormat('Y-m-d'),
         );
     }
