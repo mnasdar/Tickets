@@ -130,6 +130,7 @@ class Events extends Component
     public function deleteEvent(Event $event)
     {
         $event->delete();
+        session()->flash('danger', 'Event has been deleted.');
         $this->confirmingEventDeletion = false;
     }
 

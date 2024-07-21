@@ -24,4 +24,7 @@ Route::middleware(['auth:sanctum',config('jetstream.auth_session'),'verified',])
     Route::get('/event', function () {
         return view('event');
     })->name('event');
+    Route::get('/ticket', function () {
+        return view('ticket');
+    })->name('ticket');
 });
