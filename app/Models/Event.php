@@ -15,9 +15,14 @@ class Event extends Model
     {
         return $this->belongsTo(User::class);
     }
-    public function scopeActive( $query)
+    public function tickets()
     {
-        return $query->where('status',1);
+        return $this->hasMany(Ticket::class);
+    }
+
+    public function generate_tickets()
+    {
+        return $this->hasManyThrough(GenerateTicket::class, Ticket::class);
     }
     public function startDate(): Attribute
     {

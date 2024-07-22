@@ -16,70 +16,73 @@
                 </svg>
             </span>
         </div>
+    @elseif (session()->has('danger'))
+        <div class="flex item-center bg-red-100 text-red-800 text-md rounded font-bold px-4 py-3 relative"
+            role="alert" x-data="{ show: true }" x-show="show">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                stroke="currentColor" class="size-6 me-2">
+                <path stroke-linecap="round" stroke-linejoin="round"
+                    d="m11.25 11.25.041-.02a.75.75 0 0 1 1.063.852l-.708 2.836a.75.75 0 0 0 1.063.853l.041-.021M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Zm-9-3.75h.008v.008H12V8.25Z" />
+            </svg>
+            <p>{{ session('danger') }}</p>
+            <span class="absolute top-0 bottom-0 right-0 px-4 py-3" @click="show = false">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" role="button" viewBox="0 0 24 24"
+                    stroke-width="1.5" stroke="currentColor" class="size-6">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" />
+                </svg>
+            </span>
+        </div>
     @endif
     <div class="mt-5 text-2xl flex justify-between">
-        <div>Events</div>
+        <div>Tickets</div>
         <div class="mr-2">
-            <x-button-primary wire:click="confirmEventAdd">
-                Add New Event
+            <x-button-primary wire:click="confirmTicketAdd">
+                Add New Ticket
             </x-button-primary>
         </div>
         <!-- Add Event Confirmation Modal -->
-        <x-dialog-modal wire:model.live="confirmingEventAdd">
+        <x-dialog-modal wire:model.live="confirmingTicketAdd">
             <x-slot name="title">
-                {{ $event ? 'Edit Event' : 'Add Event' }}
+                {{ $ticket ? 'Edit Event' : 'Add Event' }}
             </x-slot>
 
             <form wire:submit="saveEvent">
                 <x-slot name="content">
+                    <div class="mt-4 col-span-6 sm:col-span-4">
+                        <x-label for="event_id" value="{{ __('Event Active') }}" />
+                        <x-select id="event_id" class="mt-1 block w-full" wire:model.defer="form.event_id">
+                            <option value="">Pilih</option>
+                            @foreach ($events as $event)
+                                <option value="{{ $event->id }}">{{ $event->name }}</option>
+                            @endforeach
+                        </x-select>
+                        <x-input-error for="form.event_id" class="mt-2" />
+                    </div>
                     <div class="mt-4 col-span-6 sm:col-span-4">
                         <x-label for="name" value="{{ __('Name') }}" />
                         <x-input id="name" type="text" class="mt-1 block w-full" wire:model.defer="form.name" />
                         <x-input-error for="form.name" class="mt-2" />
                     </div>
                     <div class="mt-4 col-span-6 sm:col-span-4">
-                        <x-label for="category" value="{{ __('Category') }}" />
-                        <x-select id="category" class="mt-1 block w-full" wire:model.defer="form.category">
-                            <option value="">Pilih</option>
-                            <option value="Music">Music</option>
-                            <option value="Festival">Festival</option>
-                            <option value="Food Court">Food Court</option>
-                        </x-select>
-                        <x-input-error for="form.category" class="mt-2" />
+                        <x-label for="stock" value="{{ __('Stock') }}" />
+                        <x-input id="stock" type="text" class="mt-1 block w-50" wire:model.defer="form.stock"
+                            autocomplete="off" />
+                        <x-input-error for="form.stock" class="mt-2" />
                     </div>
                     <div class="mt-4 col-span-6 sm:col-span-4">
-                        <x-label for="description" value="{{ __('Description') }}" />
-                        <x-text-area id="description" class="mt-1 block w-full" wire:model.defer="form.description" />
-                        <x-input-error for="form.description" class="mt-2" />
-                    </div>
-                    <div class="grid grid-cols-12 mt-4 sm:col-span-4">
-                        <div class="col-span-6">
-                            <x-label for="start_date" value="{{ __('Start Date') }}" />
-                            <x-input id="start_date" type="date" class="mt-1 block w-50"
-                                wire:model.defer="form.start_date" />
-                            <x-input-error for="form.start_date" class="mt-2" />
-                        </div>
-                        <div class="col-span-6">
-                            <x-label for="end_date" value="{{ __('End Date') }}" />
-                            <x-input id="end_date" type="date" class="mt-1 block w-50"
-                                wire:model.defer="form.end_date" />
-                            <x-input-error for="form.end_date" class="mt-2" />
-                        </div>
-                    </div>
-                    <div class="mt-4 col-span-6 sm:col-span-4">
-                        <x-label for="location" value="{{ __('Location') }}" />
-                        <x-input id="location" type="text" class="mt-1 block w-full"
-                            wire:model.defer="form.location" />
-                        <x-input-error for="form.location" class="mt-2" />
+                        <x-label for="price" value="{{ __('Price') }}" />
+                        <x-input id="price" type="text" class="mt-1 block w-50" wire:model.defer="form.price"
+                            autocomplete="off" />
+                        <x-input-error for="form.price" class="mt-2" />
                     </div>
                 </x-slot>
 
                 <x-slot name="footer">
-                    <x-secondary-button wire:click="$set('confirmingEventAdd',false)" wire:loading.attr="disabled">
+                    <x-secondary-button wire:click="$set('confirmingTicketAdd',false)" wire:loading.attr="disabled">
                         {{ __('Cancel') }}
                     </x-secondary-button>
 
-                    <x-button-save class="ms-3" wire:click="saveEvent()" wire:loading.attr="disabled">
+                    <x-button-save class="ms-3" wire:click="saveTicket()" wire:loading.attr="disabled">
                         {{ __('Save') }}
                         </x-danger-button>
 
@@ -115,6 +118,18 @@
                 <th class="px-4 py-2 text-left tracking-wider whitespace-nowrap">
                     <div class="grid grid-cols-2">
                         <div class="content-center">
+                            <button type="button" wire:click="orderBy('event_id')"
+                                class="text-sm font-medium text-gray-300 uppercase">Event Name
+                            </button>
+                        </div>
+                        <div class="ms-2">
+                            <x-sort-icon sortField="event_id" :sort-by="$sortBy" :sort-asc="$sortAsc" />
+                        </div>
+                    </div>
+                </th>
+                <th class="px-4 py-2 text-left tracking-wider">
+                    <div class="grid grid-cols-2">
+                        <div class="content-center">
                             <button type="button" wire:click="orderBy('name')"
                                 class="text-sm font-medium text-gray-300 uppercase">Name
                             </button>
@@ -127,48 +142,24 @@
                 <th class="px-4 py-2 text-left tracking-wider whitespace-nowrap">
                     <div class="grid grid-cols-2">
                         <div class="content-center">
-                            <button type="button" wire:click="orderBy('category')"
-                                class="text-sm font-medium text-gray-300 uppercase">Category
+                            <button type="button" wire:click="orderBy('stock')"
+                                class="text-sm font-medium text-gray-300 uppercase">Stock
                             </button>
                         </div>
                         <div class="ms-2">
-                            <x-sort-icon sortField="category" :sort-by="$sortBy" :sort-asc="$sortAsc" />
+                            <x-sort-icon sortField="stock" :sort-by="$sortBy" :sort-asc="$sortAsc" />
                         </div>
                     </div>
                 </th>
                 <th class="px-4 py-2 text-left tracking-wider whitespace-nowrap">
                     <div class="grid grid-cols-2">
                         <div class="content-center">
-                            <button type="button" wire:click="orderBy('start_date')"
-                                class="text-sm font-medium text-gray-300 uppercase">Start Date
+                            <button type="button" wire:click="orderBy('price')"
+                                class="text-sm font-medium text-gray-300 uppercase">Price
                             </button>
                         </div>
                         <div class="ms-2">
-                            <x-sort-icon sortField="start_date" :sort-by="$sortBy" :sort-asc="$sortAsc" />
-                        </div>
-                    </div>
-                </th>
-                <th class="px-4 py-2 text-left tracking-wider whitespace-nowrap">
-                    <div class="grid grid-cols-2">
-                        <div class="content-center">
-                            <button type="button" wire:click="orderBy('end_date')"
-                                class="text-sm font-medium text-gray-300 uppercase">End Date
-                            </button>
-                        </div>
-                        <div class="ms-2">
-                            <x-sort-icon sortField="end_date" :sort-by="$sortBy" :sort-asc="$sortAsc" />
-                        </div>
-                    </div>
-                </th>
-                <th class="px-4 py-2 text-left tracking-wider">
-                    <div class="grid grid-cols-2">
-                        <div class="content-center">
-                            <button type="button" wire:click="orderBy('location')"
-                                class="text-sm font-medium text-gray-300 uppercase">Location
-                            </button>
-                        </div>
-                        <div class="ms-2">
-                            <x-sort-icon sortField="location" :sort-by="$sortBy" :sort-asc="$sortAsc" />
+                            <x-sort-icon sortField="price" :sort-by="$sortBy" :sort-asc="$sortAsc" />
                         </div>
                     </div>
                 </th>
@@ -185,50 +176,58 @@
             </tr>
         </thead>
         <tbody class="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700">
-            @foreach ($events as $event)
+            @foreach ($tickets as $ticket)
                 <tr>
                     <td class="px-4 py-2 whitespace-nowrap">{{ $loop->iteration }}</td>
-                    <td class="px-4 py-2 whitespace-nowrap">{{ $event->name }}</td>
-                    <td class="px-4 py-2 whitespace-nowrap">{{ $event->category }}</td>
-                    <td class="px-4 py-2 whitespace-nowrap">{{ $event->start_date }}</td>
-                    <td class="px-4 py-2 whitespace-nowrap">{{ $event->end_date }}</td>
-                    <td class="px-4 py-2 whitespace">{{ $event->location }}</td>
+                    <td class="px-4 py-2 whitespace-nowrap">{{ $ticket->event->name }}</td>
+                    <td class="px-4 py-2">{{ $ticket->name }}</td>
+                    <td class="px-4 py-2 whitespace-nowrap">{{ number_format($ticket->stock) }}</td>
+                    <td class="px-4 py-2 whitespace-nowrap">Rp. {{ number_format($ticket->price) }}</td>
                     @if (!$active)
-                        <td class="px-4 py-2 whitespace-nowrap">{{ $event->status ? 'Active' : 'Not Active' }}</td>
+                        <td class="px-4 py-2 whitespace-nowrap">{{ $ticket->status ? 'Active' : 'Not Active' }}</td>
                     @endif
                     <td class="px-4 py-2 whitespace-nowrap">
-                        <x-button-info wire:click="confirmEventEdit({{ $event->id }})"
+                        <x-button-warning wire:click=""
                             wire:loading.attr="disabled">
-                            <svg class="w-4 h-4" xmlns="http://www.w3.org/2000/svg" fill="none"
-                                viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                                stroke-width="1.5" stroke="currentColor" class="size-6 w-4 h-4">
+                                <path stroke-linecap="round" stroke-linejoin="round"
+                                    d="M16.5 6v.75m0 3v.75m0 3v.75m0 3V18m-9-5.25h5.25M7.5 15h3M3.375 5.25c-.621 0-1.125.504-1.125 1.125v3.026a2.999 2.999 0 0 1 0 5.198v3.026c0 .621.504 1.125 1.125 1.125h17.25c.621 0 1.125-.504 1.125-1.125v-3.026a2.999 2.999 0 0 1 0-5.198V6.375c0-.621-.504-1.125-1.125-1.125H3.375Z" />
+                            </svg>
+
+                        </x-button-info>
+                        <x-button-info wire:click="confirmTicketEdit({{ $ticket->id }})"
+                            wire:loading.attr="disabled">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none"
+                                viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6 w-4 h-4">
                                 <path stroke-linecap="round" stroke-linejoin="round"
                                     d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L6.832 19.82a4.5 4.5 0 0 1-1.897 1.13l-2.685.8.8-2.685a4.5 4.5 0 0 1 1.13-1.897L16.863 4.487Zm0 0L19.5 7.125" />
                             </svg>
                         </x-button-info>
-                        @if ($event->status == 0)
-                        <x-danger-button disabled wire:click="confirmEventDeletion({{ $event->id }})"
-                            wire:loading.attr="disabled"
-                            class="disabled:bg-slate-50 disabled:text-slate-500 disabled:border-slate-200 disabled:shadow-none
+                        @if ($ticket->status == 0)
+                            <x-danger-button disabled wire:click="confirmTicketDeletion({{ $ticket->id }})"
+                                wire:loading.attr="disabled"
+                                class="disabled:bg-slate-50 disabled:text-slate-500 disabled:border-slate-200 disabled:shadow-none
                                 invalid:border-pink-500 invalid:text-pink-600
                                 focus:invalid:border-pink-500 focus:invalid:ring-pink-500">
-                            <svg class="w-4 h-4" xmlns="http://www.w3.org/2000/svg" fill="none"
-                                viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
-                                <path stroke-linecap="round" stroke-linejoin="round"
-                                    d="m14.74 9-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 0 1-2.244 2.077H8.084a2.25 2.25 0 0 1-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 0 0-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 0 1 3.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 0 0-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 0 0-7.5 0" />
-                            </svg>
-                        </x-danger-button>
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none"
+                                    viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6 w-4 h-4">
+                                    <path stroke-linecap="round" stroke-linejoin="round"
+                                        d="m14.74 9-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 0 1-2.244 2.077H8.084a2.25 2.25 0 0 1-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 0 0-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 0 1 3.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 0 0-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 0 0-7.5 0" />
+                                </svg>
+                            </x-danger-button>
                         @else
-                        <x-danger-button wire:click="confirmEventDeletion({{ $event->id }})"
-                            wire:loading.attr="disabled"
-                            class="disabled:bg-slate-50 disabled:text-slate-500 disabled:border-slate-200 disabled:shadow-none
+                            <x-danger-button wire:click="confirmTicketDeletion({{ $ticket->id }})"
+                                wire:loading.attr="disabled"
+                                class="disabled:bg-slate-50 disabled:text-slate-500 disabled:border-slate-200 disabled:shadow-none
                                 invalid:border-pink-500 invalid:text-pink-600
                                 focus:invalid:border-pink-500 focus:invalid:ring-pink-500">
-                            <svg class="w-4 h-4" xmlns="http://www.w3.org/2000/svg" fill="none"
-                                viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
-                                <path stroke-linecap="round" stroke-linejoin="round"
-                                    d="m14.74 9-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 0 1-2.244 2.077H8.084a2.25 2.25 0 0 1-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 0 0-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 0 1 3.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 0 0-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 0 0-7.5 0" />
-                            </svg>
-                        </x-danger-button>
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none"
+                                    viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6 w-4 h-4">
+                                    <path stroke-linecap="round" stroke-linejoin="round"
+                                        d="m14.74 9-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 0 1-2.244 2.077H8.084a2.25 2.25 0 0 1-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 0 0-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 0 1 3.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 0 0-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 0 0-7.5 0" />
+                                </svg>
+                            </x-danger-button>
                         @endif
                     </td>
                 </tr>
@@ -236,10 +235,10 @@
         </tbody>
     </table>
     <div class="mt-4">
-        {{ $events->links() }}
+        {{ $tickets->links() }}
     </div>
     <!-- Delete Event Confirmation Modal -->
-    <x-dialog-modal wire:model.live="confirmingEventDeletion">
+    <x-dialog-modal wire:model.live="confirmingTicketDeletion">
         <x-slot name="title">
             {{ __('Delete') }}
         </x-slot>
@@ -249,14 +248,15 @@
         </x-slot>
 
         <x-slot name="footer">
-            <x-secondary-button wire:click="$set('confirmingEventDeletion',false)" wire:loading.attr="disabled">
+            <x-secondary-button wire:click="$set('confirmingTicketDeletion',false)" wire:loading.attr="disabled">
                 {{ __('Cancel') }}
             </x-secondary-button>
 
-            <x-danger-button class="ms-3" wire:click="deleteEvent({{ $confirmingEventDeletion }})"
+            <x-danger-button class="ms-3" wire:click="deleteTicket({{ $confirmingTicketDeletion }})"
                 wire:loading.attr="disabled">
                 {{ __('Delete') }}
             </x-danger-button>
         </x-slot>
     </x-dialog-modal>
 </div>
+@vite(['resources/js/autonumeric.js'])

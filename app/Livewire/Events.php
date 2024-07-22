@@ -69,7 +69,7 @@ class Events extends Component
             ->orderBy($this->sortBy, $this->sortAsc ? 'Asc' : 'Desc')
             ->paginate(10);
 
-        return view('livewire.events', compact('events'));
+        return view('livewire.events', compact(['events']));
     }
 
     public function orderBy($field)
