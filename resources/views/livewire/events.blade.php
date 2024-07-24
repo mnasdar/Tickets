@@ -33,7 +33,7 @@
             </span>
         </div>
     @endif
-
+    
     <div class="mt-5 text-2xl flex justify-between">
         <div>Events</div>
         <div class="mr-2">

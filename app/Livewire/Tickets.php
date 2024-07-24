@@ -6,6 +6,9 @@ use App\Models\Event;
 use App\Models\Ticket;
 use Livewire\Component;
 use Livewire\WithPagination;
+use App\Models\GenerateTicket;
+use Illuminate\Support\Facades\Storage;
+use SimpleSoftwareIO\QrCode\Facades\QrCode;
 
 class Tickets extends Component
 {
@@ -129,5 +132,37 @@ class Tickets extends Component
             'price' => '',
         ];
         $this->ticket = null;
+    }
+    public function generatedTicket(Ticket $ticket)
+    {
+        // Buatkan dulu data sebanyak berapa stock yang diinput
+        $ticket_generate = new GenerateTicket();
+        $ticket_generate->factory()->count($ticket->stock)->create([
+            'user_id' => auth()->user()->id,
+            'ticket_id' => $ticket->id,
+        ]);
+
+        // Update status ticket menjadi generated
+        Ticket::where('id', $ticket->id)->update(['status' => 1]);
+
+        // Cari Ticket yang telah di generated
+        $generate_tickets = GenerateTicket::with(['ticket.event'])->get()->where('ticket_id', $ticket->id);
+
+        /* ======== Generate Image and Save to Storage ======== */
+        foreach ($generate_tickets as $generate_ticket) {
+            $image = QrCode::format('png')->merge('/public/image/ticket_512px.png', .4)
+                ->size(400)
+                ->errorCorrection('H')
+                ->generate($generate_ticket->ticket_code);
+            $output_file = 'qr-code/' . $generate_ticket->ticket_code . '.png';
+            Storage::disk('public')->put($output_file, $image); //storage/app/public/qr-code/JUN-2357309130.png
+        }
+        /* ======== End Generate Image and Save to Storage ======== */
+
+        session()->flash('success', 'Your Ticket was Successfully Generated.');
+    }
+    public function redirectTicket($ticketId)
+    {
+        return redirect()->route('generate-ticket', ['ticket_id' => $ticketId]);
     }
 }

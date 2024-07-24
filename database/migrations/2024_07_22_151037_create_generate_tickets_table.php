@@ -16,6 +16,7 @@ return new class extends Migration
             $table->foreignId('user_id');
             $table->foreignId('ticket_id');
             $table->string('ticket_code');
+            $table->string('email')->nullable();
             $table->timestamps();
         });
     }

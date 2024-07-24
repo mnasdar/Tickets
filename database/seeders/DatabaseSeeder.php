@@ -13,7 +13,7 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        \App\Models\User::factory(10)->create();
+        // \App\Models\User::factory(10)->create();
 
         \App\Models\User::factory()->create([
             'name' => 'nasdar',
@@ -28,5 +28,14 @@ class DatabaseSeeder extends Seeder
         ]);
 
         \App\Models\Event::factory(10)->create();
+
+        \App\Models\Ticket::create(([
+            'user_id' => 1,
+            'event_id' => 1,
+            'name' => 'VIP',
+            'stock' => 10,
+            'price' => 10000,
+            'status' => 0,
+        ]));
     }
 }

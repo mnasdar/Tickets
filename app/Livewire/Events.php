@@ -66,8 +66,10 @@ class Events extends Component
             ->when($this->active, function ($query) {
                 return $query->where('status', 1);
             })
-            ->orderBy($this->sortBy, $this->sortAsc ? 'Asc' : 'Desc')
-            ->paginate(10);
+            ->orderBy($this->sortBy, $this->sortAsc ? 'Asc' : 'Desc');
+
+        // $query = $events->toSql();
+        $events= $events->paginate(10);
 
         return view('livewire.events', compact(['events']));
     }

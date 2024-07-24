@@ -1,5 +1,6 @@
 <?php
 
+use App\Livewire\GenerateTickets;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -33,6 +34,12 @@ Route::middleware(['auth:sanctum',config('jetstream.auth_session'),'verified',])
     {
         return view('ticket');
     })->name('ticket');
+
+    // Route::get('/generate-ticket/{ticket_id}', GenerateTickets::class)->name('generate-ticket');
+    Route::get('/generate-ticket/{ticket_id}', function ()
+    {
+        return view('generate-ticket');
+    })->name('generate-ticket');
 
     Route::get('/scan', function ()
     {
