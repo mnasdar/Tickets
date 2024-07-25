@@ -18,31 +18,34 @@ Route::get('/', function () {
     return view('auth.login');
 });
 
-Route::middleware(['auth:sanctum',config('jetstream.auth_session'),'verified',])->group(function () {
+Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified',])->group(function () {
 
-    Route::get('/dashboard', function ()
-    {
+    Route::get('/dashboard', function () {
         return view('dashboard');
     })->name('dashboard');
 
-    Route::get('/event', function ()
-    {
+    Route::get('/event', function () {
         return view('event');
     })->name('event');
 
-    Route::get('/ticket', function ()
-    {
-        return view('ticket');
-    })->name('ticket');
 
-    // Route::get('/generate-ticket/{ticket_id}', GenerateTickets::class)->name('generate-ticket');
-    Route::get('/generate-ticket/{ticket_id}', function ()
-    {
-        return view('generate-ticket');
-    })->name('generate-ticket');
+    Route::group(['prefix' => '/ticket'], function () {
+        Route::get('/', function () {
+            return view('ticket');
+        })->name('ticket');
+        
+        Route::get('/generate-ticket/{ticket_id}', function ($ticket_id) {
+            return view('generate-ticket', compact('ticket_id'));
+        })->name('generate-ticket');
+    });
 
-    Route::get('/scan', function ()
-    {
-        return view('scan');
-    })->name('scan');
+    Route::group(['prefix' => '/scan'], function () {
+        Route::get('/', function () {
+            return view('scan');
+        })->name('scan');
+
+        Route::get('/scan-ticket/{event_id}', function ($event_id) {
+            return view('scan-ticket', compact('event_id'));
+        })->name('scan-ticket');
+    });
 });

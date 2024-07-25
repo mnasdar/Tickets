@@ -88,7 +88,7 @@ class Tickets extends Component
         } else {
             // Create new Ticket
             $validated['form']['user_id'] = auth()->user()->id;
-            $validated['form']['status'] = 1;
+            $validated['form']['status'] = 0;
 
             Ticket::create($validated['form']);
             session()->flash('success', 'Ticket successfully saved.');
@@ -136,8 +136,8 @@ class Tickets extends Component
     public function generatedTicket(Ticket $ticket)
     {
         // Buatkan dulu data sebanyak berapa stock yang diinput
-        $ticket_generate = new GenerateTicket();
-        $ticket_generate->factory()->count($ticket->stock)->create([
+        // $ticket_generate = new GenerateTicket();
+        GenerateTicket::factory()->count($ticket->stock)->create([
             'user_id' => auth()->user()->id,
             'ticket_id' => $ticket->id,
         ]);
@@ -161,8 +161,8 @@ class Tickets extends Component
 
         session()->flash('success', 'Your Ticket was Successfully Generated.');
     }
-    public function redirectTicket($ticketId)
+    public function redirectTicket($ticket_id)
     {
-        return redirect()->route('generate-ticket', ['ticket_id' => $ticketId]);
+        return redirect()->route('generate-ticket', [$ticket_id]);
     }
 }
