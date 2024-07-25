@@ -43,4 +43,5 @@ class GenerateTickets extends Component
             ->paginate(10);
         return view('livewire.generate-tickets', compact(['data']));
     }
+    
 }
