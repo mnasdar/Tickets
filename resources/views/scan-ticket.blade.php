@@ -7,7 +7,7 @@
     <div class="py-12">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             <div class="text-white bg-white dark:bg-gray-800 overflow-hidden shadow-xl sm:rounded-lg">
-                <livewire:generate-tickets ticket_id='{{ $ticket_id }}' />
+                <livewire:scan-tickets event_id='{{ $event_id }}' />
             </div>
         </div>
     </div>

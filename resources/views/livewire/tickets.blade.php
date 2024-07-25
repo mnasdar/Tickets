@@ -184,28 +184,37 @@
                     <td class="px-4 py-2 whitespace-nowrap">{{ number_format($ticket->stock) }}</td>
                     <td class="px-4 py-2 whitespace-nowrap">Rp. {{ number_format($ticket->price) }}</td>
                     @if (!$active)
-                        <td class="px-4 py-2 whitespace-nowrap">{{ $ticket->status ? 'Generated' : 'Not Generated' }}
+                        <td class="px-4 py-2 whitespace-nowrap">
+                            @if ($event->status == 1)
+                            <span class="bg-green-700 rounded px-1 py-0">
+                                {{ __('Generated') }}
+                            </span>
+                            @else
+                            <span class="bg-red-700 rounded px-1 py-0">
+                                {{ __('Not Generated') }}
+                            </span>
+                            @endif
                         </td>
                     @endif
                     <td class="px-4 py-2 whitespace-nowrap">
                         @if ($ticket->status == 1)
-                        <x-button-save wire:click="redirectTicket({{ $ticket->id }})"
-                            wire:loading.attr="disabled">
-                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
-                                    stroke-width="1.5" stroke="currentColor" class="size-6 w-4 h-4">
+                            <x-button-save wire:click="redirectTicket({{ $ticket->id }})"
+                                wire:loading.attr="disabled">
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                                    stroke-width="1.5" stroke="currentColor" class="text-white size-6 w-4 h-4">
                                     <path stroke-linecap="round" stroke-linejoin="round"
                                         d="M6.75 12a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0ZM12.75 12a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0ZM18.75 12a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0Z" />
                                 </svg>
-                            </x-button-info>
-                        @else
-                            <x-button-warning wire:click="generatedTicket({{ $ticket->id }})"
-                                wire:loading.attr="disabled">
-                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
-                                    stroke-width="1.5" stroke="currentColor" class="size-6 w-4 h-4">
-                                    <path stroke-linecap="round" stroke-linejoin="round"
-                                        d="M16.5 6v.75m0 3v.75m0 3v.75m0 3V18m-9-5.25h5.25M7.5 15h3M3.375 5.25c-.621 0-1.125.504-1.125 1.125v3.026a2.999 2.999 0 0 1 0 5.198v3.026c0 .621.504 1.125 1.125 1.125h17.25c.621 0 1.125-.504 1.125-1.125v-3.026a2.999 2.999 0 0 1 0-5.198V6.375c0-.621-.504-1.125-1.125-1.125H3.375Z" />
-                                </svg>
                                 </x-button-info>
+                            @else
+                                <x-button-warning wire:click="generatedTicket({{ $ticket->id }})"
+                                    wire:loading.attr="disabled">
+                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                                        stroke-width="1.5" stroke="currentColor" class="size-6 w-4 h-4">
+                                        <path stroke-linecap="round" stroke-linejoin="round"
+                                            d="M16.5 6v.75m0 3v.75m0 3v.75m0 3V18m-9-5.25h5.25M7.5 15h3M3.375 5.25c-.621 0-1.125.504-1.125 1.125v3.026a2.999 2.999 0 0 1 0 5.198v3.026c0 .621.504 1.125 1.125 1.125h17.25c.621 0 1.125-.504 1.125-1.125v-3.026a2.999 2.999 0 0 1 0-5.198V6.375c0-.621-.504-1.125-1.125-1.125H3.375Z" />
+                                    </svg>
+                                    </x-button-info>
                         @endif
 
                         <x-button-info wire:click="confirmTicketEdit({{ $ticket->id }})"
