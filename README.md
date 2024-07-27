@@ -4,7 +4,7 @@
 News App adalah aplikasi web untuk menampilkan berita terkini.
 
 ## Prasyarat
-- PHP >= 8.2
+- PHP >= 8.1
 - Composer >= 2.x.x
 - Node.js >= 20.xx.x
 - NPM => 10.2.3
@@ -46,12 +46,12 @@ cp .env.example .env
 pastikan anda telah membuat ```database``` di postgresq. Masuk ke file .env dan sesuaikan konfigurasi database Anda:
 
 ```bash
-DB_CONNECTION=pgsql
+DB_CONNECTION=mysql
 DB_HOST=127.0.0.1
-DB_PORT=5432
-DB_DATABASE=database_name_postgresql
-DB_USERNAME=database_user_postgresql
-DB_PASSWORD=database_password_postgresql
+DB_PORT=3306
+DB_DATABASE=tickets
+DB_USERNAME=root
+DB_PASSWORD=
 ```
 
 ### Generate Key Laravel
