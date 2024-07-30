@@ -1,6 +1,7 @@
 <?php
 
 use App\Livewire\GenerateTickets;
+use App\Livewire\ScanTickets;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -33,10 +34,11 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified',
         Route::get('/', function () {
             return view('ticket');
         })->name('ticket');
-        
+
         Route::get('/generate-ticket/{ticket_id}', function ($ticket_id) {
             return view('generate-ticket', compact('ticket_id'));
         })->name('generate-ticket');
+        Route::post('print-Ticket/{ticket_code}', [GenerateTickets::class, 'printTicket'])->name('print.Ticket');
     });
 
     Route::group(['prefix' => '/scan'], function () {
@@ -47,5 +49,7 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified',
         Route::get('/scan-ticket/{event_id}', function ($event_id) {
             return view('scan-ticket', compact('event_id'));
         })->name('scan-ticket');
+
+        Route::post('scan-ticket/{event_id}', [ScanTickets::class, 'scanTicket'])->name('scan.Ticket');
     });
 });

@@ -176,6 +176,8 @@
             </tr>
         </thead>
         <tbody class="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700">
+
+            <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
             @foreach ($tickets as $ticket)
                 <tr>
                     <td class="px-4 py-2 whitespace-nowrap">{{ $loop->iteration }}</td>
@@ -198,27 +200,26 @@
                     @endif
                     <td class="px-4 py-2 whitespace-nowrap">
                         @if ($ticket->status == 1)
-                            <x-button-save data-tooltip-target="tooltip-detail{{ $ticket->id }}" wire:click="redirectTicket({{ $ticket->id }})"
-                                wire:loading.attr="disabled">
+                            <x-button-save data-tooltip-target="tooltip-detail{{ $ticket->id }}"
+                                wire:click="redirectTicket({{ $ticket->id }})" wire:loading.attr="disabled">
                                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
                                     stroke-width="1.5" stroke="currentColor" class="text-white size-6 w-4 h-4">
                                     <path stroke-linecap="round" stroke-linejoin="round"
                                         d="M6.75 12a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0ZM12.75 12a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0ZM18.75 12a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0Z" />
                                 </svg>
-                                </x-button-info>
-                                <x-tooltip id='tooltip-detail{{ $ticket->id }}'>Detail Ticket</x-tooltip>
-                            @else
-                                <x-button-warning data-tooltip-target="tooltip-generated{{ $ticket->id }}"
-                                    wire:click="generatedTicket({{ $ticket->id }})" wire:loading.attr="disabled">
-                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
-                                        stroke-width="1.5" stroke="currentColor" class="size-6 w-4 h-4">
-                                        <path stroke-linecap="round" stroke-linejoin="round"
-                                            d="M16.5 6v.75m0 3v.75m0 3v.75m0 3V18m-9-5.25h5.25M7.5 15h3M3.375 5.25c-.621 0-1.125.504-1.125 1.125v3.026a2.999 2.999 0 0 1 0 5.198v3.026c0 .621.504 1.125 1.125 1.125h17.25c.621 0 1.125-.504 1.125-1.125v-3.026a2.999 2.999 0 0 1 0-5.198V6.375c0-.621-.504-1.125-1.125-1.125H3.375Z" />
-                                    </svg>
-                                    </x-button-info>
-                                    <x-tooltip id='tooltip-generated{{ $ticket->id }}'>Generate Ticket</x-tooltip>
+                            </x-button-save>
+                            <x-tooltip id='tooltip-detail{{ $ticket->id }}'>Detail Ticket</x-tooltip>
+                        @else
+                            <x-button-warning data-tooltip-target="tooltip-generated{{ $ticket->id }}"
+                                wire:click="generatedTicket({{ $ticket->id }})" wire:loading.attr="disabled">
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                                    stroke-width="1.5" stroke="currentColor" class="size-6 w-4 h-4">
+                                    <path stroke-linecap="round" stroke-linejoin="round"
+                                        d="M16.5 6v.75m0 3v.75m0 3v.75m0 3V18m-9-5.25h5.25M7.5 15h3M3.375 5.25c-.621 0-1.125.504-1.125 1.125v3.026a2.999 2.999 0 0 1 0 5.198v3.026c0 .621.504 1.125 1.125 1.125h17.25c.621 0 1.125-.504 1.125-1.125v-3.026a2.999 2.999 0 0 1 0-5.198V6.375c0-.621-.504-1.125-1.125-1.125H3.375Z" />
+                                </svg>
+                            </x-button-warning>
+                            <x-tooltip id='tooltip-generated{{ $ticket->id }}'>Generate Ticket</x-tooltip>
                         @endif
-
                         @if ($ticket->status == 1)
                             <x-button-info disabled wire:click="confirmTicketEdit({{ $ticket->id }})"
                                 wire:loading.attr="disabled"
@@ -271,6 +272,7 @@
             @endforeach
         </tbody>
     </table>
+
     <div class="mt-4">
         {{ $tickets->links() }}
     </div>

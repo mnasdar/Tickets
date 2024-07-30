@@ -6,6 +6,7 @@ use App\Models\Event;
 use App\Models\Ticket;
 use Livewire\Component;
 use Livewire\WithPagination;
+use RealRashid\SweetAlert\Facades\Alert;
 use App\Models\GenerateTicket;
 use Illuminate\Support\Facades\Storage;
 use SimpleSoftwareIO\QrCode\Facades\QrCode;

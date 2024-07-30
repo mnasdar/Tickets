@@ -5,6 +5,7 @@ namespace App\Livewire;
 use App\Models\ScanTicket;
 use Livewire\Component;
 use App\Models\GenerateTicket;
+use Illuminate\Http\Request;
 use RealRashid\SweetAlert\Facades\Alert;
 
 
@@ -20,26 +21,31 @@ class ScanTickets extends Component
             'form.ticket_code' => 'required',
         ];
     }
+    public function mount()
+    {
+        $event_id = $this->event_id;
+    }
     public function render()
     {
-        return view('livewire.scan-tickets');
+        $event_id = $this->event_id;
+        return view('livewire.scan-tickets',compact('event_id'));
     }
-    public function scanTicket()
+    public function scanTicket($event_id, Request $request)
     {
         // Validasi input
-        $validated = $this->validate();
-
+        $validate = $request->validate([
+            'ticket_code'=>['required'],
+        ]);
         // Dapatkan ticket_code dari input
-        $ticket_code = $this->form['ticket_code'];
+        $ticket_code = $validate['ticket_code'];
 
         // Cari ticket berdasarkan ticket_code
         $check = GenerateTicket::where('ticket_code', $ticket_code)->first();
-
         if ($check) {
             // Mengakses event_id dari model Ticket yang berhubungan dengan GenerateTicket
-            $event_id = $check->ticket->event_id;
+            $eventId = $check->ticket->event_id;
 
-            if ($event_id == $this->event_id) {
+            if ($eventId == $event_id) {
                 // Cari ScanTicket berdasarkan generate_ticket_id
                 $scan = ScanTicket::where('generate_ticket_id', $check->id)->first();
 
@@ -72,7 +78,7 @@ class ScanTickets extends Component
         }
 
         // Redirect setelah semua logika selesai
-        return redirect()->route('scan-ticket', $this->event_id);
+        return redirect()->route('scan-ticket', $event_id);
     }
 
 }
